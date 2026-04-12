@@ -1,0 +1,23 @@
+# .gitignore
+
+# Python / Django
+__pycache__/
+*.pyc
+*.pyo
+db.sqlite3
+*.log
+
+# Virtual Environment
+venv/
+env/
+
+# Machine Learning Weights (Crucial to ignore!)
+# GitHub has a 100MB file limit. Your DistilBERT model will crash the push if you don't ignore it.
+model_engine/fine_tuned_distilbert/model.safetensors
+model_engine/fine_tuned_distilbert/pytorch_model.bin
+*.h5
+*.pt
+
+# OS generated files
+.DS_Store
+Thumbs.db

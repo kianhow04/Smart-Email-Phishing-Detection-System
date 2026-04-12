@@ -1,0 +1,46 @@
+<!-- templates/base.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}PhishDetect AI{% endblock %}</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/base.css' %}">
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="topbar-brand">
+      <svg class="brand-icon" width="32" height="32" viewBox="0 0 32 32" fill="none">
+        <rect width="32" height="32" rx="8" fill="#6C3FE8"/>
+        <path d="M16 6L8 10V17C8 21.4 11.6 25.5 16 26.5C20.4 25.5 24 21.4 24 17V10L16 6Z" fill="white"/>
+      </svg>
+      <span class="brand-name">PhishDetect AI</span>
+    </div>
+    <nav class="topbar-nav">
+      <a href="{% url 'home' %}" class="nav-link">Home</a>
+      <a href="{% url 'docs' %}" class="nav-link">Docs</a>
+      {% if user.is_authenticated %}
+        <a href="{% url 'admin_logout' %}" class="nav-link">Logout</a>
+      {% else %}
+        <a href="{% url 'admin_login' %}" class="nav-link">Login</a>
+      {% endif %}
+    </nav>
+  </header>
+
+  <!-- PAGE CONTENT -->
+  <main class="page-main">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="page-footer">
+    <span>Made with ♥ PhishDetect AI</span>
+  </footer>
+
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

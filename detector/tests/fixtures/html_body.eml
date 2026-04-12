@@ -1,0 +1,13 @@
+From: support@paypal-verify.net
+To: user@example.com
+Subject: Your PayPal Account Has Been Limited
+Date: Mon, 20 Jan 2026 11:00:00 +0000
+MIME-Version: 1.0
+Content-Type: text/html; charset=utf-8
+Authentication-Results: spf=pass; dkim=pass; dmarc=pass
+
+<html><body>
+<p>Dear Customer,</p>
+<p>Your account has been <strong>limited</strong>.</p>
+<p><a href="http://paypal-fake.xyz/login">Click here to restore access</a></p>
+</body></html>

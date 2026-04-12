@@ -1,0 +1,24 @@
+From: newsletter@company.com
+To: subscriber@gmail.com
+Subject: January Newsletter
+Date: Mon, 20 Jan 2026 09:00:00 +0000
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="BOUNDARY123"
+Authentication-Results: spf=pass; dkim=pass; dmarc=pass
+
+--BOUNDARY123
+Content-Type: text/plain; charset=utf-8
+
+Hello, here is your January newsletter. Visit https://company.com for more.
+
+--BOUNDARY123
+Content-Type: text/html; charset=utf-8
+
+<html><body><p>Hello, visit <a href="https://company.com">our site</a>.</p></body></html>
+
+--BOUNDARY123
+Content-Type: application/pdf
+Content-Disposition: attachment; filename="newsletter.pdf"
+
+(fake binary content)
+--BOUNDARY123--

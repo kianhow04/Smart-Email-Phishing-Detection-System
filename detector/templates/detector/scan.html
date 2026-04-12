@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PhishDetect AI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; }
+        .explanation-badge { font-size: 1.1em; margin: 2px; color: white;}
+    </style>
+</head>
+<body>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            
+            <div class="text-center mb-4">
+                <h1 class="display-5 fw-bold">PhishDetect AI</h1>
+                <p class="text-muted">Powered by DistilBERT and Explainable AI (LIME)</p>
+            </div>
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="id_eml_file" class="form-label fw-bold">Upload an .eml File for Analysis</label>
+                            <input type="file" name="eml_file" class="form-control" id="id_eml_file" accept=".eml" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Analyze Email</button>
+                    </form>
+                    
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-danger mt-3">{{ message }}</div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if is_scanned %}
+            
+                {% if prediction.label == 'phishing' %}
+                    <div class="alert alert-danger text-center shadow-sm">
+                        <h2 class="mb-0">🚨 PHISHING DETECTED 🚨</h2>
+                        <p class="mb-0">Confidence: <strong>{{ prediction.score|floatformat:4 }}</strong></p>
+                    </div>
+                {% else %}
+                    <div class="alert alert-success text-center shadow-sm">
+                        <h2 class="mb-0">✅ LEGITIMATE EMAIL ✅</h2>
+                        <p class="mb-0">Confidence: <strong>{{ prediction.score|floatformat:4 }}</strong></p>
+                    </div>
+                {% endif %}
+
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-white fw-bold">Email Metadata</div>
+                    <div class="card-body">
+                        <p><strong>Sender:</strong> {{ parsed_data.sender }}</p>
+                        <p><strong>Subject:</strong> {{ parsed_data.subject }}</p>
+                        <p><strong>Extracted URLs:</strong> {{ parsed_data.all_urls|length }} found</p>
+                    </div>
+                </div>
+
+                {% if prediction.label == 'phishing' and explanations %}
+                <div class="card shadow-sm border-danger">
+                    <div class="card-header bg-danger text-white fw-bold">
+                        AI Analysis: Why is this phishing?
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted small mb-3">The AI flagged the following keywords. Hover or read below to understand why.</p>
+                        
+                        <div class="mb-4">
+                            {% for item in explanations %}
+                                <span class="badge explanation-badge" style="background-color: {{ item.highlight_color }};" title="{{ item.explanation }}">
+                                    {{ item.token }}
+                                </span>
+                            {% endfor %}
+                        </div>
+
+                        <hr>
+                        <h6 class="fw-bold">Detailed Breakdown:</h6>
+                        <ul class="list-group list-group-flush">
+                            {% for item in explanations %}
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div>
+                                    <div class="fw-bold" style="color: {{ item.highlight_color }};">{{ item.token }}</div>
+                                    <small>{{ item.explanation }}</small>
+                                </div>
+                                <span class="badge bg-secondary rounded-pill">Score: {{ item.importance_score }}</span>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                {% endif %}
+                
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

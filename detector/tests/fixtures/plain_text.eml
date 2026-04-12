@@ -1,0 +1,12 @@
+From: attacker@phishing-site.com
+To: victim@gmail.com
+Subject: Verify Your Account Now
+Date: Mon, 20 Jan 2026 10:00:00 +0000
+Message-ID: <abc123@phishing-site.com>
+Reply-To: billing@fakebank.com
+X-Mailer: PHP Script 8.1.5
+Authentication-Results: mx.google.com; spf=fail (softfail); dkim=fail (no valid signature); dmarc=quarantine
+
+Dear User, we have detected suspicious activity on your account.
+Please click here immediately: http://malicious-link.xyz/verify
+Your account will be suspended if you do not act now.
