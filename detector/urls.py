@@ -1,9 +1,9 @@
+
+# detector/urls.py
 from django.urls import path
 from . import views
 
-app_name = 'detector'
-
 urlpatterns = [
-    # The empty string '' means this will be the homepage
-    path('', views.scanner_view, name='scanner'),
+    path('upload/', views.upload_view, name='upload'),
+    path('results/', views.results_view, name='results'),
 ]

@@ -1,0 +1,175 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+  {% if log.label == 'phishing' %}
+    ⚠ Phishing Detected — PhishDetect AI
+  {% else %}
+    ✓ Legitimate Email — PhishDetect AI
+  {% endif %}
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/results.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="results-wrapper">
+
+  <!-- ── Alert Banner ─────────────────────────────────── -->
+  {% if log.label == 'phishing' %}
+  <div class="alert-banner alert-danger">
+    <span class="alert-icon">⚠</span>
+    PHISHING THREAT DETECTED — {{ log.filename }}
+  </div>
+  {% else %}
+  <div class="alert-banner alert-safe">
+    <span class="alert-icon">✓</span>
+    LEGITIMATE EMAIL DETECTED — {{ log.filename }}
+  </div>
+  {% endif %}
+
+  <!-- ── Main Card ─────────────────────────────────────── -->
+  <div class="results-card">
+
+    <!-- LEFT PANEL — Donut Chart -->
+    <div class="results-left">
+      <p class="score-label">AI Confidence Score</p>
+
+      <div class="donut-wrapper">
+        <canvas id="donutChart"
+                width="180"
+                height="180"
+                data-score="{{ score_percent }}"
+                data-label="{{ log.label }}">
+        </canvas>
+        <div class="donut-center">
+          <span class="donut-score
+            {% if log.label == 'phishing' %}donut-score--danger
+            {% else %}donut-score--safe{% endif %}">
+            {{ score_percent }}%
+          </span>
+          <span class="donut-sub">Confidence Score</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL — Tabs -->
+    <div class="results-right">
+
+      <!-- Tab Row -->
+      <div class="tab-row">
+        <button class="tab-btn active" data-tab="tab-results">
+          Results
+        </button>
+        <button class="tab-btn" data-tab="tab-explanation">
+          Explanation
+        </button>
+      </div>
+
+      <!-- ── TAB 1: Results ──────────────────────────── -->
+      <div id="tab-results" class="tab-content">
+        <table class="meta-table">
+          <thead>
+            <tr>
+              <th class="meta-th">Attribute</th>
+              <th class="meta-th">Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in metadata_rows %}
+            <tr class="meta-row">
+              <td class="meta-attr">{{ row.attr }}</td>
+              <td class="meta-value">
+                {% if row.status == 'danger' %}
+                  <span class="value-danger">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
+                         style="vertical-align:middle; margin-right:4px; flex-shrink:0;">
+                      <circle cx="8" cy="8" r="7" stroke="#E53935" stroke-width="1.5"/>
+                      <path d="M5.5 5.5L10.5 10.5M10.5 5.5L5.5 10.5"
+                            stroke="#E53935" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                    {{ row.value }}
+                  </span>
+                {% elif row.status == 'warning' %}
+                  <span class="value-warning">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
+                         style="vertical-align:middle; margin-right:4px; flex-shrink:0;">
+                      <path d="M8 2L14.5 13H1.5L8 2Z"
+                            stroke="#6B7280" stroke-width="1.5"
+                            stroke-linejoin="round"/>
+                      <path d="M8 6.5V9" stroke="#6B7280"
+                            stroke-width="1.5" stroke-linecap="round"/>
+                      <circle cx="8" cy="11" r="0.75" fill="#6B7280"/>
+                    </svg>
+                    {{ row.value }}
+                  </span>
+                {% else %}
+                  <span class="value-safe">{{ row.value }}</span>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ── TAB 2: Explanation ─────────────────────── -->
+      <div id="tab-explanation" class="tab-content" style="display:none;">
+        <div class="xai-content">
+
+          <h2 class="xai-title">AI Text Analysis</h2>
+
+          <!-- Highlighted email body -->
+          <div class="email-preview">
+            <p class="email-preview-label">Email Content:</p>
+            <p class="email-preview-body">
+              {{ highlighted_html|safe }}
+            </p>
+          </div>
+
+          <!-- Token explanation table -->
+          <table class="token-table">
+            <thead>
+              <tr>
+                <th class="token-th">Token</th>
+                <th class="token-th">Explanation</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for token in explanation_tokens %}
+              <tr class="token-row">
+                <td class="token-td token-name">{{ token.token }}</td>
+                <td class="token-td token-explanation">{{ token.explanation }}</td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="2" class="token-td token-empty">
+                  No suspicious tokens identified in this email.
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+      <!-- end tab-explanation -->
+
+    </div>
+    <!-- end results-right -->
+
+  </div>
+  <!-- end results-card -->
+
+  <!-- Back button -->
+  <div class="results-back">
+    <a href="{% url 'home' %}" class="btn-back">← Scan Another Email</a>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/results.js' %}"></script>
+{% endblock %}

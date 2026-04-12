@@ -22,11 +22,11 @@
     </div>
     <nav class="topbar-nav">
       <a href="{% url 'home' %}" class="nav-link">Home</a>
-      <a href="{% url 'docs' %}" class="nav-link">Docs</a>
+      <a href="#" class="nav-link">Docs</a>
       {% if user.is_authenticated %}
-        <a href="{% url 'admin_logout' %}" class="nav-link">Logout</a>
+        <a href="#" class="nav-link">Logout</a>
       {% else %}
-        <a href="{% url 'admin_login' %}" class="nav-link">Login</a>
+        <a href="#" class="nav-link">Login</a>
       {% endif %}
     </nav>
   </header>
@@ -36,10 +36,7 @@
     {% block content %}{% endblock %}
   </main>
 
-  <!-- FOOTER -->
-  <footer class="page-footer">
-    <span>Made with ♥ PhishDetect AI</span>
-  </footer>
+
 
   {% block extra_js %}{% endblock %}
 </body>
