@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Dashboard — PhishDetect AI{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/admin.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="admin-wrapper">
+  <div class="admin-card">
+
+    <!-- ── Sidebar ──────────────────────────────────── -->
+    {% include 'admin_portal/partials/sidebar.html' %}
+
+    <!-- ── Dashboard Content ────────────────────────── -->
+    <div class="admin-content">
+      <h1 class="content-title">System Statistics</h1>
+
+      <!-- Stat Cards -->
+      <div class="stat-cards">
+
+        <!-- Total Scans -->
+        <div class="stat-card">
+          <div class="stat-info">
+            <p class="stat-label">Total Scans</p>
+            <p class="stat-num stat-num--default">{{ total }}</p>
+          </div>
+          <div class="stat-icon-box stat-icon-box--blue">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                 stroke="#6C3FE8" stroke-width="1.8"
+                 stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12
+                       a2 2 0 002-2V8z"/>
+              <polyline points="14,2 14,8 20,8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Phishing Detected -->
+        <div class="stat-card">
+          <div class="stat-info">
+            <p class="stat-label">Phishing Detected</p>
+            <p class="stat-num stat-num--danger">{{ phishing_count }}</p>
+          </div>
+          <div class="stat-icon-box stat-icon-box--red">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                 stroke="#E53935" stroke-width="1.8"
+                 stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94
+                       a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+              <line x1="12" y1="9" x2="12" y2="13"/>
+              <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Legitimate Emails -->
+        <div class="stat-card">
+          <div class="stat-info">
+            <p class="stat-label">Legitimate Emails</p>
+            <p class="stat-num stat-num--safe">{{ legit_count }}</p>
+          </div>
+          <div class="stat-icon-box stat-icon-box--green">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                 stroke="#43A047" stroke-width="1.8"
+                 stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+              <polyline points="22,4 12,14.01 9,11.01"/>
+            </svg>
+          </div>
+        </div>
+
+      </div>
+      <!-- end stat-cards -->
+
+      <!-- Threat Distribution -->
+      <div class="threat-section">
+        <h2 class="threat-title">Threat Distribution</h2>
+        <div class="chart-area">
+          <div class="admin-donut-wrapper">
+            <canvas id="adminDonut"
+                    width="180"
+                    height="180"
+                    data-phishing="{{ phishing_pct }}"
+                    data-total="{{ total }}">
+            </canvas>
+            <div class="admin-donut-center">
+              <span class="admin-donut-pct">{{ phishing_pct }}%</span>
+              <span class="admin-donut-label">Phishing</span>
+            </div>
+          </div>
+          <div class="chart-legend">
+            <div class="legend-item">
+              <span class="legend-dot legend-dot--red"></span>
+              <span class="legend-text">Phishing ({{ phishing_pct }}%)</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-dot legend-dot--grey"></span>
+              <span class="legend-text">
+                Legitimate ({{ 100|add:"-"|add:phishing_pct }}%)
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <!-- end admin-content -->
+
+  </div>
+  <!-- end admin-card -->
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/admin_chart.js' %}"></script>
+{% endblock %}

@@ -102,6 +102,36 @@ def upload_view(request):
     except Exception:
         explanation = []
 
+    # Parse
+    print("\n--- NEW SCAN STARTED ---")
+    print("1. Parsing email...")
+    try:
+        parsed = parse_eml(uploaded_file)
+    except Exception as e:
+        print(f"CRASH in Parser: {e}")
+        return render(request, 'core/home.html', {'error': 'Failed to parse.'})
+
+    # Predict
+    print("2. Parse successful! Running DistilBERT AI...")
+    try:
+        model = DetectorConfig.model
+        tokenizer = DetectorConfig.tokenizer
+        prediction = predict(parsed['body_text'], parsed['all_urls'], model, tokenizer)
+    except Exception as e:
+        print(f"CRASH in AI Engine: {e}")
+        return render(request, 'core/home.html', {'error': f"Model failed: {e}"})
+
+    # Explain
+    print(f"3. AI Finished (Score: {prediction['score']}). Running LIME...")
+    try:
+        explanation = explain(parsed['body_text'], model, tokenizer)
+    except Exception as e:
+        print(f"CRASH in LIME Engine: {e}")
+        explanation = []
+
+    # Save to DB
+    print("4. LIME Finished! Saving to Database...")
+   
     # Save to DB
     log = ScanLog.objects.create(
         filename=uploaded_file.name,

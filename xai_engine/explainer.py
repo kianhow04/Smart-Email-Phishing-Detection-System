@@ -81,6 +81,10 @@ def explain(text: str, model, tokenizer) -> list[dict]:
     if model is None or tokenizer is None:
         logger.warning("Model not loaded — returning empty explanation.")
         return []
+    
+    if text and len(text) > 2500:
+        text = text[:2500] 
+    # --------------------------------------------------------
 
     if not text or len(text.strip()) < 10:
         return []

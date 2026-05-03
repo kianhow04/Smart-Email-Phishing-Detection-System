@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Account Settings — PhishDetect AI{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/admin.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="admin-wrapper">
+  <div class="admin-card">
+
+    {% include 'admin_portal/partials/sidebar.html' %}
+
+    <div class="admin-content">
+      <h1 class="content-title">Account Settings</h1>
+
+      <!-- Success / Error messages -->
+      {% if messages %}
+        {% for message in messages %}
+          <div class="settings-message
+            {% if message.tags == 'success' %}settings-message--success
+            {% else %}settings-message--error{% endif %}">
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+
+      <form method="POST" action="{% url 'account_settings' %}"
+            class="settings-form">
+        {% csrf_token %}
+
+        <!-- Administrator Name -->
+        <div class="settings-group">
+          <label class="settings-label" for="admin_name">
+            Administrator Name
+          </label>
+          <input type="text"
+                 id="admin_name"
+                 name="admin_name"
+                 class="settings-input"
+                 value="{{ form.admin_name.value|default:'' }}"
+                 required>
+          {% if form.admin_name.errors %}
+            <p class="field-error">{{ form.admin_name.errors.0 }}</p>
+          {% endif %}
+        </div>
+
+        <!-- Email Address -->
+        <div class="settings-group">
+          <label class="settings-label" for="email">
+            Email Address
+          </label>
+          <input type="email"
+                 id="email"
+                 name="email"
+                 class="settings-input"
+                 value="{{ form.email.value|default:'' }}"
+                 required>
+          {% if form.email.errors %}
+            <p class="field-error">{{ form.email.errors.0 }}</p>
+          {% endif %}
+        </div>
+
+        <!-- Change Password -->
+        <div class="settings-group">
+          <label class="settings-label" for="new_password">
+            Change Password
+          </label>
+          <input type="password"
+                 id="new_password"
+                 name="new_password"
+                 class="settings-input"
+                 placeholder="Leave blank to keep current password">
+          {% if form.new_password.errors %}
+            <p class="field-error">{{ form.new_password.errors.0 }}</p>
+          {% endif %}
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="settings-group">
+          <label class="settings-label" for="confirm_password">
+            Confirm Password
+          </label>
+          <input type="password"
+                 id="confirm_password"
+                 name="confirm_password"
+                 class="settings-input"
+                 placeholder="Repeat new password">
+          {% if form.confirm_password.errors %}
+            <p class="field-error">{{ form.confirm_password.errors.0 }}</p>
+          {% endif %}
+        </div>
+
+        <!-- Save Button -->
+        <div class="settings-footer">
+          <button type="submit" class="btn-save">Save Changes</button>
+        </div>
+
+      </form>
+    </div>
+    <!-- end admin-content -->
+
+  </div>
+</div>
+{% endblock %}

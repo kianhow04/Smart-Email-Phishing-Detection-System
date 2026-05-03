@@ -19,7 +19,7 @@
     <div class="upload-error">⚠ {{ error }}</div>
     {% endif %}
 
-    <form method="POST" action="#" enctype="multipart/form-data" id="upload-form">
+    <form method="POST" action="{% url 'upload' %}" enctype="multipart/form-data" id="upload-form">
       {% csrf_token %}
 
       <!-- Drop Zone -->

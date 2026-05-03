@@ -1,0 +1,123 @@
+/* static/css/home.css */
+.home-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 64px 24px 40px;
+}
+
+.hero-title {
+  font-size: 48px;
+  font-weight: 800;
+  color: var(--color-text-dark);
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.upload-card {
+  background: var(--color-white);
+  border-radius: 16px;
+  padding: 32px;
+  width: 100%;
+  max-width: 560px;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.07);
+}
+
+.upload-error {
+  background: #FFCDD2;
+  color: var(--color-danger-red);
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 16px;
+}
+
+/* ── Drop Zone ──────────────────────────────────────── */
+.drop-zone {
+  border: 2px dashed var(--color-border-light);
+  border-radius: 12px;
+  padding: 48px 32px;
+  text-align: center;
+  background: var(--color-white);
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.drop-zone.dragover {
+  border-color: var(--color-purple-primary);
+  background: #F3F0FD;
+}
+
+.drop-zone.has-file {
+  border-color: var(--color-purple-primary);
+}
+
+.drop-zone-icon {
+  display: block;
+  margin: 0 auto 16px;
+}
+
+.drop-zone-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-text-dark);
+  margin-bottom: 6px;
+}
+
+.drop-zone-sub {
+  font-size: 14px;
+  color: var(--color-text-grey);
+}
+
+.drop-zone-filename {
+  font-size: 14px;
+  color: var(--color-purple-primary);
+  font-weight: 600;
+  margin-top: 10px;
+  min-height: 20px;
+}
+
+/* ── Upload Button ──────────────────────────────────── */
+.btn-upload {
+  width: 100%;
+  padding: 14px;
+  margin-top: 16px;
+  background: linear-gradient(90deg, #6C3FE8 0%, #4A7BF5 100%);
+  color: var(--color-white);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: opacity 0.2s;
+}
+
+.btn-upload:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-upload.loading {
+  opacity: 0.85;
+  cursor: not-allowed;
+}
+
+/* ── Spinner ────────────────────────────────────────── */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 3px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  vertical-align: middle;
+  margin-right: 8px;
+}
